@@ -3,10 +3,10 @@ import { Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 
 const NavContainer = styled.nav`
-  background: linear-gradient(135deg, #2c3e50 0%, #1a3040 100%);
+  background: var(--header-gradient);
   color: white;
   padding: 1rem;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 3px 15px rgba(0, 0, 0, 0.2);
   position: sticky;
   top: 0;
   z-index: 100;
@@ -29,7 +29,7 @@ const NavHeader = styled.div`
 const NavList = styled.ul<{ isOpen: boolean }>`
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: 0.75rem;
   list-style: none;
   margin: 0;
   padding: 0;
@@ -37,6 +37,7 @@ const NavList = styled.ul<{ isOpen: boolean }>`
   @media (max-width: 768px) {
     flex-direction: column;
     display: ${props => props.isOpen ? 'flex' : 'none'};
+    animation: ${props => props.isOpen ? 'slideUp 0.3s forwards' : 'none'};
   }
 `;
 
@@ -44,25 +45,44 @@ const NavItem = styled.li<{ active: boolean }>`
   & a {
     color: white;
     text-decoration: none;
-    padding: 0.5rem 0.75rem;
-    border-radius: 4px;
+    padding: 0.6rem 0.85rem;
+    border-radius: 8px;
     display: flex;
     align-items: center;
     gap: 0.5rem;
     background-color: ${props => props.active ? 'rgba(255, 255, 255, 0.15)' : 'transparent'};
-    transition: all 0.3s ease;
+    transition: var(--transition-fast);
     font-weight: ${props => props.active ? '600' : '400'};
+    position: relative;
+    overflow: hidden;
     
     &:hover {
       background-color: rgba(255, 255, 255, 0.1);
       transform: translateY(-2px);
+    }
+    
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      width: ${props => props.active ? '80%' : '0'};
+      height: 2px;
+      background-color: white;
+      transform: translateX(-50%);
+      transition: width 0.3s ease;
+      border-radius: 2px;
+    }
+    
+    &:hover::after {
+      width: 80%;
     }
   }
 `;
 
 const AppTitle = styled.h1`
   margin: 0;
-  font-size: 1.5rem;
+  font-size: 1.6rem;
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -80,10 +100,15 @@ const LogoIcon = styled.span`
   justify-content: center;
   width: 40px;
   height: 40px;
-  background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+  background: var(--danger-gradient);
   border-radius: 50%;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 3px 10px rgba(231, 76, 60, 0.4);
   margin-right: 0.5rem;
+  transition: transform 0.3s ease;
+  
+  &:hover {
+    transform: scale(1.1) rotate(5deg);
+  }
 `;
 
 const MobileMenuButton = styled.button`
@@ -94,9 +119,12 @@ const MobileMenuButton = styled.button`
   cursor: pointer;
   display: none;
   transition: transform 0.3s ease;
+  padding: 0.5rem;
+  border-radius: 50%;
   
   &:hover {
     transform: scale(1.1);
+    background-color: rgba(255, 255, 255, 0.1);
   }
   
   @media (max-width: 768px) {
@@ -105,8 +133,12 @@ const MobileMenuButton = styled.button`
 `;
 
 const NavItemIcon = styled.span`
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   transition: transform 0.2s ease;
+  
+  ${NavItem}:hover & {
+    transform: scale(1.2);
+  }
 `;
 
 interface NavLink {

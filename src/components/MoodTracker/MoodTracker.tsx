@@ -27,32 +27,49 @@ const MoodButtonsContainer = styled.div`
   flex-wrap: wrap;
 `;
 
-const MoodButton = styled.button<{ selected: boolean }>`
-  background: ${props => props.selected ? '#f0f0f0' : 'transparent'};
-  border: ${props => props.selected ? '2px solid #2c3e50' : '1px solid #ddd'};
+const MoodButton = styled.button<{ selected: boolean; color: string }>`
+  background: ${props => props.selected ? props.color + '40' : 'white'};
+  border: ${props => props.selected ? `3px solid ${props.color}` : '1px solid #ddd'};
   border-radius: 50%;
-  width: 60px;
-  height: 60px;
-  font-size: 2rem;
+  width: 70px;
+  height: 70px;
+  font-size: 2.2rem;
   cursor: pointer;
   margin: 0.5rem;
-  transition: transform 0.2s, border 0.2s;
+  transition: all 0.3s ease;
+  box-shadow: ${props => props.selected ? `0 5px 15px ${props.color}40` : '0 3px 8px rgba(0,0,0,0.05)'};
   
-  &:hover {
-    transform: scale(1.1);
+  &:hover, &:focus {
+    transform: ${props => props.selected ? 'scale(1.05)' : 'scale(1.1)'};
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    border-color: ${props => props.color};
   }
+  
+  &:active {
+    transform: scale(0.95);
+  }
+  
+  animation: ${props => props.selected ? 'pulse 1s' : 'none'};
 `;
 
-const MoodLabel = styled.div`
-  font-size: 0.8rem;
+const MoodLabel = styled.div<{ selected: boolean; color: string }>`
+  font-size: 0.85rem;
   text-align: center;
-  margin-top: 0.25rem;
+  margin-top: 0.5rem;
+  font-weight: ${props => props.selected ? '600' : '400'};
+  color: ${props => props.selected ? props.color : 'var(--text-secondary)'};
+  transition: all 0.3s ease;
 `;
 
 const DateDisplay = styled.div`
   text-align: center;
-  margin-bottom: 1rem;
-  font-weight: bold;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: var(--text-primary);
+  padding: 0.5rem;
+  background-color: rgba(0,0,0,0.02);
+  border-radius: 8px;
 `;
 
 const MoodContainer = styled.div`
@@ -64,17 +81,43 @@ const MoodContainer = styled.div`
 const MoodItem = styled.div`
   display: flex;
   align-items: center;
-  margin: 0.5rem 0;
+  margin: 0.75rem 0;
+  padding: 0.75rem 1rem;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  width: 100%;
+  transition: all 0.2s ease;
+  
+  &:hover {
+    transform: translateX(5px);
+    box-shadow: 0 3px 15px rgba(0,0,0,0.08);
+  }
 `;
 
 const MoodIcon = styled.span`
-  font-size: 1.5rem;
-  margin-right: 0.5rem;
+  font-size: 1.8rem;
+  margin-right: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 40px;
 `;
 
 const MoodDate = styled.span`
   font-size: 0.9rem;
-  color: #666;
+  color: var(--text-secondary);
+  flex: 1;
+`;
+
+const SelectedMoodMessage = styled.div`
+  text-align: center;
+  margin-top: 1rem;
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  font-weight: 500;
+  animation: fadeIn 0.5s ease-out;
 `;
 
 const MoodTracker: React.FC = () => {
@@ -127,39 +170,52 @@ const MoodTracker: React.FC = () => {
     return moodObj ? moodObj.color : '#ccc';
   };
   
+  const findMoodByEmoji = (emoji: string) => {
+    return MOODS.find(m => m.emoji === emoji);
+  };
+  
   return (
     <>
-      <Card title="How are you feeling today?">
+      <Card title="How are you feeling today?" icon="😊" accentColor="#FFD700">
         <DateDisplay>{format(new Date(), 'EEEE, MMMM d, yyyy')}</DateDisplay>
         <MoodButtonsContainer>
-          {MOODS.map(mood => (
-            <div key={mood.emoji}>
-              <MoodButton
-                selected={selectedMood === mood.emoji}
-                onClick={() => handleMoodSelect(mood.emoji)}
-              >
-                {mood.emoji}
-              </MoodButton>
-              <MoodLabel>{mood.label}</MoodLabel>
-            </div>
-          ))}
+          {MOODS.map(mood => {
+            const isSelected = selectedMood === mood.emoji;
+            return (
+              <div key={mood.emoji}>
+                <MoodButton
+                  selected={isSelected}
+                  onClick={() => handleMoodSelect(mood.emoji)}
+                  color={mood.color}
+                >
+                  {mood.emoji}
+                </MoodButton>
+                <MoodLabel 
+                  selected={isSelected}
+                  color={mood.color}
+                >
+                  {mood.label}
+                </MoodLabel>
+              </div>
+            );
+          })}
         </MoodButtonsContainer>
         
         {selectedMood && (
-          <div style={{ textAlign: 'center' }}>
-            <p>You're feeling {MOODS.find(m => m.emoji === selectedMood)?.label} today!</p>
-          </div>
+          <SelectedMoodMessage>
+            You're feeling {findMoodByEmoji(selectedMood)?.label} today!
+          </SelectedMoodMessage>
         )}
       </Card>
       
-      <Card title="Monthly Mood Calendar">
+      <Card title="Monthly Mood Calendar" icon="📅">
         <MoodCalendar 
           moodEntries={moodEntries} 
           getMoodColor={getMoodColor}
         />
       </Card>
       
-      <Card title="Recent Moods">
+      <Card title="Recent Moods" icon="📝">
         <MoodContainer>
           {moodEntries.length === 0 ? (
             <p>No mood entries yet. Start tracking your mood above!</p>
@@ -167,10 +223,13 @@ const MoodTracker: React.FC = () => {
             moodEntries
               .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
               .slice(0, 7)
-              .map(entry => (
-                <MoodItem key={entry.date}>
+              .map((entry, index) => (
+                <MoodItem 
+                  key={entry.date}
+                  style={{ animationDelay: `${index * 0.1}s` }}
+                >
                   <MoodIcon>{entry.mood}</MoodIcon>
-                  <MoodDate>{format(new Date(entry.date), 'MMM d, yyyy')}</MoodDate>
+                  <MoodDate>{format(new Date(entry.date), 'EEEE, MMM d, yyyy')}</MoodDate>
                 </MoodItem>
               ))
           )}
