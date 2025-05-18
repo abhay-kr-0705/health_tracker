@@ -1,0 +1,11 @@
+[build]
+  # Directory to publish
+  publish = "build"
+  # Build command
+  command = "npm run build"
+
+# Handle SPA routing by redirecting any unknown routes back to the index page
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200 

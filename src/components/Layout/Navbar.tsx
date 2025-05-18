@@ -1,0 +1,171 @@
+import React, { useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import styled from 'styled-components';
+
+const NavContainer = styled.nav`
+  background: linear-gradient(135deg, #2c3e50 0%, #1a3040 100%);
+  color: white;
+  padding: 1rem;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+`;
+
+const NavContent = styled.div`
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+`;
+
+const NavHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+`;
+
+const NavList = styled.ul<{ isOpen: boolean }>`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  
+  @media (max-width: 768px) {
+    flex-direction: column;
+    display: ${props => props.isOpen ? 'flex' : 'none'};
+  }
+`;
+
+const NavItem = styled.li<{ active: boolean }>`
+  & a {
+    color: white;
+    text-decoration: none;
+    padding: 0.5rem 0.75rem;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: ${props => props.active ? 'rgba(255, 255, 255, 0.15)' : 'transparent'};
+    transition: all 0.3s ease;
+    font-weight: ${props => props.active ? '600' : '400'};
+    
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+      transform: translateY(-2px);
+    }
+  }
+`;
+
+const AppTitle = styled.h1`
+  margin: 0;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 700;
+  background: linear-gradient(to right, #ffffff, #ecf0f1);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+`;
+
+const LogoIcon = styled.span`
+  font-size: 1.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  margin-right: 0.5rem;
+`;
+
+const MobileMenuButton = styled.button`
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  display: none;
+  transition: transform 0.3s ease;
+  
+  &:hover {
+    transform: scale(1.1);
+  }
+  
+  @media (max-width: 768px) {
+    display: block;
+  }
+`;
+
+const NavItemIcon = styled.span`
+  font-size: 1.2rem;
+  transition: transform 0.2s ease;
+`;
+
+interface NavLink {
+  path: string;
+  label: string;
+  icon: string;
+}
+
+const Navbar: React.FC = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const location = useLocation();
+  
+  const links: NavLink[] = [
+    { path: '/', label: 'Dashboard', icon: '📊' },
+    { path: '/mood', label: 'Mood', icon: '😊' },
+    { path: '/water', label: 'Water', icon: '💧' },
+    { path: '/breathing', label: 'Breathing', icon: '🧘' },
+    { path: '/meals', label: 'Meals', icon: '🍽️' },
+    { path: '/sleep', label: 'Sleep', icon: '😴' },
+    { path: '/fitness', label: 'Fitness', icon: '💪' },
+    { path: '/stretch', label: 'Stretch', icon: '🤸' },
+    { path: '/journal', label: 'Journal', icon: '📓' },
+    { path: '/weight', label: 'Weight', icon: '⚖️' },
+  ];
+  
+  const toggleMenu = () => {
+    setIsOpen(!isOpen);
+  };
+  
+  return (
+    <NavContainer>
+      <NavContent>
+        <NavHeader>
+          <AppTitle>
+            <LogoIcon role="img" aria-label="Health tracker logo">❤️</LogoIcon>
+            Health Tracker
+          </AppTitle>
+          <MobileMenuButton onClick={toggleMenu}>
+            {isOpen ? '✕' : '☰'}
+          </MobileMenuButton>
+        </NavHeader>
+        
+        <NavList isOpen={isOpen}>
+          {links.map(link => (
+            <NavItem 
+              key={link.path} 
+              active={location.pathname === link.path}
+              onClick={() => setIsOpen(false)}
+            >
+              <Link to={link.path}>
+                <NavItemIcon role="img" aria-label={`${link.label} icon`}>{link.icon}</NavItemIcon>
+                {link.label}
+              </Link>
+            </NavItem>
+          ))}
+        </NavList>
+      </NavContent>
+    </NavContainer>
+  );
+};
+
+export default Navbar; 

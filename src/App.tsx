@@ -1,26 +1,38 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Layout from './components/Layout/Layout';
+import Dashboard from './components/Dashboard/Dashboard';
+import MoodTracker from './components/MoodTracker/MoodTracker';
+import WaterTracker from './components/WaterTracker/WaterTracker';
+import BreathingExercise from './components/BreathingExercise/BreathingExercise';
+import MealLog from './components/MealLog/MealLog';
+import SleepTracker from './components/SleepTracker/SleepTracker';
+import FitnessRoutine from './components/FitnessRoutine/FitnessRoutine';
+import StretchSequence from './components/StretchSequence/StretchSequence';
+import MentalHealthJournal from './components/MentalHealthJournal/MentalHealthJournal';
+import WeightTracker from './components/WeightTracker/WeightTracker';
+import GlobalStyles from './styles/GlobalStyles';
 
-function App() {
+const App: React.FC = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <GlobalStyles />
+      <Layout>
+        <Routes>
+          <Route path="/" element={<Dashboard />} />
+          <Route path="/mood" element={<MoodTracker />} />
+          <Route path="/water" element={<WaterTracker />} />
+          <Route path="/breathing" element={<BreathingExercise />} />
+          <Route path="/meals" element={<MealLog />} />
+          <Route path="/sleep" element={<SleepTracker />} />
+          <Route path="/fitness" element={<FitnessRoutine />} />
+          <Route path="/stretch" element={<StretchSequence />} />
+          <Route path="/journal" element={<MentalHealthJournal />} />
+          <Route path="/weight" element={<WeightTracker />} />
+        </Routes>
+      </Layout>
+    </Router>
   );
-}
+};
 
 export default App;
