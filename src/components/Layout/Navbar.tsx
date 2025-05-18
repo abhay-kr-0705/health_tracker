@@ -39,6 +39,7 @@ const NavContent = styled.div`
   margin: 0 auto;
   display: flex;
   flex-direction: column;
+  position: relative;
 `;
 
 const NavHeader = styled.div`
@@ -46,6 +47,11 @@ const NavHeader = styled.div`
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1rem;
+  
+  @media (min-width: 769px) {
+    justify-content: center;
+    margin-bottom: 0;
+  }
 `;
 
 const NavList = styled.ul<{ isOpen: boolean }>`
@@ -66,6 +72,11 @@ const NavList = styled.ul<{ isOpen: boolean }>`
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     backdrop-filter: blur(4px);
     -webkit-backdrop-filter: blur(4px);
+  }
+  
+  @media (min-width: 769px) {
+    justify-content: center;
+    margin-top: 0.75rem;
   }
 `;
 
@@ -106,9 +117,16 @@ const NavItem = styled.li<{ active: boolean }>`
       width: 80%;
     }
   }
+  
+  @media (min-width: 769px) {
+    & a {
+      font-size: 0.95rem;
+      padding: 0.5rem 0.75rem;
+    }
+  }
 `;
 
-const AppTitle = styled.h1`
+const AppTitle = styled(Link)`
   margin: 0;
   font-size: 1.6rem;
   display: flex;
@@ -119,6 +137,11 @@ const AppTitle = styled.h1`
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  text-decoration: none;
+  
+  @media (min-width: 769px) {
+    font-size: 1.8rem;
+  }
 `;
 
 const LogoIcon = styled.span`
@@ -137,6 +160,12 @@ const LogoIcon = styled.span`
   
   &:hover {
     transform: scale(1.1) rotate(5deg);
+  }
+  
+  @media (min-width: 769px) {
+    width: 45px;
+    height: 45px;
+    font-size: 2rem;
   }
 `;
 
@@ -236,7 +265,7 @@ const Navbar: React.FC = () => {
       }}>
         <NavContent>
           <NavHeader>
-            <AppTitle>
+            <AppTitle to="/">
               <LogoIcon role="img" aria-label="Health tracker logo">❤️</LogoIcon>
               Health Tracker
             </AppTitle>
