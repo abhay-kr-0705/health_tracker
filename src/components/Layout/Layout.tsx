@@ -55,169 +55,47 @@ const Main = styled.main`
 const Footer = styled.footer`
   background: linear-gradient(135deg, rgba(44, 62, 80, 0.95) 0%, rgba(26, 48, 64, 0.95) 100%);
   color: white;
-  padding: 3rem 1.5rem 2rem;
+  padding: 1.2rem;
   text-align: center;
   position: relative;
   z-index: 1;
   box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.05);
-  position: relative;
-  overflow: hidden;
-  
-  &::before {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 1px;
-    background: linear-gradient(
-      to right,
-      rgba(255,255,255,0),
-      rgba(255,255,255,0.2),
-      rgba(255,255,255,0)
-    );
-  }
 `;
 
 const FooterContent = styled.div`
   max-width: 1200px;
   margin: 0 auto;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 2rem;
-`;
-
-const FooterColumns = styled.div`
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  flex-wrap: wrap;
-  gap: 3rem;
-  margin-bottom: 1rem;
-  text-align: left;
-`;
-
-const FooterColumn = styled.div`
-  flex: 1;
-  min-width: 200px;
-  max-width: 300px;
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-`;
-
-const ColumnTitle = styled.h3`
-  font-size: 1.1rem;
-  font-weight: 600;
-  margin-bottom: 0.75rem;
-  position: relative;
-  padding-bottom: 0.5rem;
+  justify-content: space-between;
   
-  &::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 40px;
-    height: 2px;
-    background: rgba(255, 255, 255, 0.3);
-    border-radius: 2px;
-  }
-`;
-
-const FooterLinks = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  
-  a {
-    color: rgba(255, 255, 255, 0.8);
-    text-decoration: none;
-    position: relative;
-    padding: 0.25rem 0;
-    transition: all 0.2s ease;
-    display: flex;
-    align-items: center;
+  @media (max-width: 600px) {
+    flex-direction: column;
     gap: 0.5rem;
-    
-    &:hover {
-      text-decoration: none;
-      color: white;
-      transform: translateX(5px);
-    }
   }
 `;
 
 const FooterLogo = styled.div`
-  font-size: 1.5rem;
-  font-weight: 700;
-  margin-bottom: 0.75rem;
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 0.75rem;
+  gap: 0.5rem;
 `;
 
 const LogoIcon = styled.span`
-  font-size: 1.8rem;
+  font-size: 1.2rem;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
+  width: 25px;
+  height: 25px;
   background: var(--danger-gradient);
   border-radius: 50%;
-  box-shadow: 0 3px 10px rgba(231, 76, 60, 0.4);
+  box-shadow: 0 2px 5px rgba(231, 76, 60, 0.4);
 `;
 
 const Copyright = styled.div`
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(255, 255, 255, 0.7);
   font-size: 0.85rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  width: 100%;
-`;
-
-const SocialLinks = styled.div`
-  display: flex;
-  gap: 1rem;
-  margin-top: 0.5rem;
-  justify-content: center;
-`;
-
-const SocialIcon = styled.a`
-  font-size: 1.5rem;
-  color: white;
-  background: rgba(255, 255, 255, 0.1);
-  width: 40px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  transition: all 0.3s ease;
-  
-  &:hover {
-    background: var(--primary-color);
-    transform: translateY(-5px);
-  }
-`;
-
-const FooterTagline = styled.p`
-  margin-top: 0.5rem;
-  max-width: 400px;
-  line-height: 1.6;
-  color: rgba(255, 255, 255, 0.8);
-  text-align: center;
-`;
-
-const FooterDivider = styled.div`
-  width: 60px;
-  height: 3px;
-  background: linear-gradient(to right, rgba(255,255,255,0.1), rgba(255,255,255,0.3), rgba(255,255,255,0.1));
-  margin: 1rem auto;
-  border-radius: 3px;
 `;
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
@@ -229,43 +107,11 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         <FooterContent>
           <FooterLogo>
             <LogoIcon role="img" aria-label="Health tracker logo">❤️</LogoIcon>
-            Health Tracker
+            <span>Health Tracker</span>
           </FooterLogo>
-          <FooterTagline>
-            Track and improve your daily wellness habits with our comprehensive suite of health tools.
-          </FooterTagline>
-          <FooterDivider />
-          <SocialLinks>
-            <SocialIcon href="#" aria-label="Facebook">📘</SocialIcon>
-            <SocialIcon href="#" aria-label="Twitter">🐦</SocialIcon>
-            <SocialIcon href="#" aria-label="Instagram">📷</SocialIcon>
-            <SocialIcon href="#" aria-label="YouTube">🎬</SocialIcon>
-          </SocialLinks>
-          
-          <FooterColumns>
-            <FooterColumn>
-              <ColumnTitle>Features</ColumnTitle>
-              <FooterLinks>
-                <a href="/mood">😊 Mood Tracking</a>
-                <a href="/water">💧 Water Intake</a>
-                <a href="/sleep">😴 Sleep Analysis</a>
-                <a href="/fitness">💪 Fitness Routines</a>
-              </FooterLinks>
-            </FooterColumn>
-            
-            <FooterColumn>
-              <ColumnTitle>Help & Support</ColumnTitle>
-              <FooterLinks>
-                <a href="/faq">FAQ</a>
-                <a href="/contact">Contact Us</a>
-                <a href="/privacy">Privacy Policy</a>
-                <a href="/terms">Terms of Service</a>
-              </FooterLinks>
-            </FooterColumn>
-          </FooterColumns>
           
           <Copyright>
-            &copy; {new Date().getFullYear()} Health Tracker App. All rights reserved.
+            &copy; {new Date().getFullYear()} Health Tracker App
           </Copyright>
         </FooterContent>
       </Footer>
