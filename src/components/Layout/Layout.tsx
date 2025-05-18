@@ -1,10 +1,15 @@
 import React, { ReactNode } from 'react';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import Navbar from './Navbar';
 
 interface LayoutProps {
   children: ReactNode;
 }
+
+const fadeIn = keyframes`
+  from { opacity: 0; }
+  to { opacity: 1; }
+`;
 
 const Container = styled.div`
   min-height: 100vh;
@@ -40,7 +45,7 @@ const Main = styled.main`
   box-sizing: border-box;
   position: relative;
   z-index: 1;
-  animation: fadeIn 0.5s ease-out;
+  animation: ${fadeIn} 0.5s ease-out;
   
   @media (max-width: 768px) {
     padding: 1rem;
@@ -48,14 +53,30 @@ const Main = styled.main`
 `;
 
 const Footer = styled.footer`
-  background: var(--header-gradient);
+  background: linear-gradient(135deg, rgba(44, 62, 80, 0.95) 0%, rgba(26, 48, 64, 0.95) 100%);
   color: white;
-  padding: 2rem 1.5rem;
+  padding: 3rem 1.5rem 2rem;
   text-align: center;
-  font-size: 0.9rem;
   position: relative;
   z-index: 1;
   box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.05);
+  position: relative;
+  overflow: hidden;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(
+      to right,
+      rgba(255,255,255,0),
+      rgba(255,255,255,0.2),
+      rgba(255,255,255,0)
+    );
+  }
 `;
 
 const FooterContent = styled.div`
@@ -64,40 +85,65 @@ const FooterContent = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1.5rem;
+  gap: 2rem;
+`;
+
+const FooterColumns = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  flex-wrap: wrap;
+  gap: 2rem;
+  margin-bottom: 1rem;
+  text-align: left;
+`;
+
+const FooterColumn = styled.div`
+  flex: 1;
+  min-width: 200px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+`;
+
+const ColumnTitle = styled.h3`
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  position: relative;
+  padding-bottom: 0.5rem;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 40px;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 2px;
+  }
 `;
 
 const FooterLinks = styled.div`
   display: flex;
-  gap: 2rem;
-  flex-wrap: wrap;
-  justify-content: center;
+  flex-direction: column;
+  gap: 0.75rem;
   
   a {
-    color: #ecf0f1;
+    color: rgba(255, 255, 255, 0.8);
     text-decoration: none;
     position: relative;
     padding: 0.25rem 0;
-    
-    &::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 0;
-      height: 2px;
-      background-color: #ecf0f1;
-      transition: width 0.3s ease;
-      border-radius: 2px;
-    }
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
     
     &:hover {
       text-decoration: none;
       color: white;
-      
-      &::after {
-        width: 100%;
-      }
+      transform: translateX(5px);
     }
   }
 `;
@@ -105,7 +151,7 @@ const FooterLinks = styled.div`
 const FooterLogo = styled.div`
   font-size: 1.5rem;
   font-weight: 700;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -125,35 +171,152 @@ const LogoIcon = styled.span`
 `;
 
 const Copyright = styled.div`
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(255, 255, 255, 0.6);
   font-size: 0.85rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  width: 100%;
+`;
+
+const SocialLinks = styled.div`
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.5rem;
+`;
+
+const SocialIcon = styled.a`
+  font-size: 1.5rem;
+  color: white;
+  background: rgba(255, 255, 255, 0.1);
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    background: var(--primary-color);
+    transform: translateY(-5px);
+  }
+`;
+
+const FooterTagline = styled.p`
+  margin-top: 0.5rem;
+  max-width: 400px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.8);
+`;
+
+const NewsletterForm = styled.form`
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: 100%;
+`;
+
+const InputGroup = styled.div`
+  display: flex;
+  width: 100%;
+  max-width: 360px;
+  margin: 0 auto;
+  
+  input {
+    flex: 1;
+    padding: 0.7rem 1rem;
+    border: none;
+    border-radius: 4px 0 0 4px;
+    font-size: 0.9rem;
+    
+    &:focus {
+      outline: none;
+      box-shadow: 0 0 0 2px var(--primary-color);
+    }
+  }
+  
+  button {
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 0 1.25rem;
+    border-radius: 0 4px 4px 0;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    
+    &:hover {
+      background: #2980b9;
+    }
+  }
 `;
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    alert('Newsletter signup would happen here in a real application!');
+  };
+  
   return (
     <Container>
       <Navbar />
-      <Main>{children}</Main>
+      <Main id="main-content">{children}</Main>
       <Footer>
         <FooterContent>
-          <FooterLogo>
-            <LogoIcon role="img" aria-label="Health tracker logo">❤️</LogoIcon>
-            Health Tracker
-          </FooterLogo>
-          <div>
-            Track and improve your daily wellness habits with our simple tools
-          </div>
-          <FooterLinks>
-            <a href="#" onClick={(e) => { e.preventDefault(); alert('Privacy Policy would go here'); }}>
-              Privacy Policy
-            </a>
-            <a href="#" onClick={(e) => { e.preventDefault(); alert('Terms of Service would go here'); }}>
-              Terms of Service
-            </a>
-            <a href="#" onClick={(e) => { e.preventDefault(); alert('Contact information would go here'); }}>
-              Contact
-            </a>
-          </FooterLinks>
+          <FooterColumns>
+            <FooterColumn>
+              <FooterLogo>
+                <LogoIcon role="img" aria-label="Health tracker logo">❤️</LogoIcon>
+                Health Tracker
+              </FooterLogo>
+              <FooterTagline>
+                Track and improve your daily wellness habits with our comprehensive suite of health tools.
+              </FooterTagline>
+              <SocialLinks>
+                <SocialIcon href="#" aria-label="Facebook">📘</SocialIcon>
+                <SocialIcon href="#" aria-label="Twitter">🐦</SocialIcon>
+                <SocialIcon href="#" aria-label="Instagram">📷</SocialIcon>
+                <SocialIcon href="#" aria-label="YouTube">🎬</SocialIcon>
+              </SocialLinks>
+            </FooterColumn>
+            
+            <FooterColumn>
+              <ColumnTitle>Features</ColumnTitle>
+              <FooterLinks>
+                <a href="/mood">😊 Mood Tracking</a>
+                <a href="/water">💧 Water Intake</a>
+                <a href="/sleep">😴 Sleep Analysis</a>
+                <a href="/fitness">💪 Fitness Routines</a>
+              </FooterLinks>
+            </FooterColumn>
+            
+            <FooterColumn>
+              <ColumnTitle>Help & Support</ColumnTitle>
+              <FooterLinks>
+                <a href="/faq">FAQ</a>
+                <a href="/contact">Contact Us</a>
+                <a href="/privacy">Privacy Policy</a>
+                <a href="/terms">Terms of Service</a>
+              </FooterLinks>
+            </FooterColumn>
+            
+            <FooterColumn>
+              <ColumnTitle>Stay Updated</ColumnTitle>
+              <p>Subscribe to our newsletter for tips on healthy living.</p>
+              <NewsletterForm onSubmit={handleSubmit}>
+                <InputGroup>
+                  <input 
+                    type="email" 
+                    placeholder="Your email address" 
+                    aria-label="Email for newsletter"
+                    required
+                  />
+                  <button type="submit">Sign Up</button>
+                </InputGroup>
+              </NewsletterForm>
+            </FooterColumn>
+          </FooterColumns>
+          
           <Copyright>
             &copy; {new Date().getFullYear()} Health Tracker App. All rights reserved.
           </Copyright>
